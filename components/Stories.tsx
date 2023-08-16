@@ -21,7 +21,7 @@ export default function Stories() {
 
   return (
 
-    <div className='flex space-x-2 bg-slate-50 px-6 py-4 border border-gray-200 mt-4 overflow-x-auto scrollbar-none'>
+    <div className='flex space-x-2 bg-gray-50 px-6 py-4 border border-gray-200 mt-4 overflow-x-auto scrollbar-none rounded-md'>
       {
         storyUsers.map((user: any) => (
           <Story key={user.id} username={user.username} img={user.img} />

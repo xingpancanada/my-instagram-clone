@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <header className='sticky top-0 pt-4 pb-3 bg-white items-center justify-between z-30 shadow'>
       <div className='flex w-full px-10 items-center'>
-        <Link href={''} className='flex items-center space-x-2'>
+        <Link href={''} className='flex items-center space-x-3'>
           <Image
             src="/BigAlsCanada.png"
             alt='logo'
@@ -17,14 +17,14 @@ export default function Header() {
             height="50"
             className='rounded shadow-sky-100 duration-300 transition-all ease-in-out hover:shadow-sky-50 hover:shadow-xl hover:-translate-y-1 bg-transparent'
           />
-          {/* <p className='font-semibold min-w-full hidden md:inline-flex shadow-sky-100 duration-300 transition-all ease-in-out hover:shadow-sky-50 hover:shadow-xl hover:-translate-y-1 bg-transparent'>Big Al&apos;s Canada </p> */}
+          <p className='font-semibold min-w-full hidden md:inline-flex shadow-sky-100 duration-300 transition-all ease-in-out hover:shadow-sky-50 hover:shadow-xl hover:-translate-y-1 bg-transparent'>My Instagram Clone </p>
         </Link>
         <div className='flex justify-center w-full'>
           <SearchBox />
         </div>
         <div className='flex space-x-4 items-center'>
-          <AiFillHome className='hidden md:inline-flex h-8 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
-          <AiFillPlusCircle className='h-14 sm:h-10 md:h-8 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
+          <AiFillHome className='hidden md:inline-flex h-10 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
+          <AiFillPlusCircle className='h-14 sm:h-10 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
           <img src="/fish.jpeg" alt="user-image"  className='h-10 rounded-full'/>
           {/* <button className='bg-blue-500 text-white rounded px-4 py-1 w-[120px] text-sm mr-2 hover:brightness-105 hover:shadow-md transition-shadow mx-4'>Sign in</button> */}
         </div>
