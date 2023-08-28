@@ -7,9 +7,9 @@ export default function Post({ img, userImg, username, id, caption }: any) {
   return (
     <div className='bg-white my-6 border rounded-md'>
       {/* post header */}
-      <div className='flex items-center p-6'>
+      <div className='flex items-center px-6 py-3'>
         <div className='flex items-center space-x-2 flex-1'>
-          <img src={userImg} alt={username} className='rounded-full h-16 object-cover border border-gray-400 p-0.5 hover:scale-110 transition-transform ease-out duration-200 cursor-pointer' />
+          <img src={userImg} alt={username} className='rounded-full h-14 object-cover border p-0.5 border-gray-400 hover:scale-110 transition-transform ease-out duration-200 cursor-pointer' />
           <p className='font-semibold'>{username}</p>
         </div>
         <BiDotsHorizontalRounded className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />

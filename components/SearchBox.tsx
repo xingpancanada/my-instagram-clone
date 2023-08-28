@@ -24,7 +24,7 @@ export default function SearchBox() {
   return (
     <form onSubmit={handleSubmit} className='flex max-w-[80%] min-w-[40%] h-10 items-center border border-gray-200 rounded-xl hover:shadow focus:shadow transition-shadow'>
       <AiOutlineSearch className='text-lg text-gray-400 m-2 SearchIcon cursor-pointer ml-3 mt-[12px]' onClick={handleSubmit} />
-      <input type="text" placeholder='my search' className='flex-grow bg-slate-50 focus:outline-none antialiased ml-2 mr-5'
+      <input type="text" placeholder='my search' className='flex-grow focus:outline-none antialiased ml-2 mr-5'
         onChange={(e) => setTerm(e.target.value)}
         value={term}
       />
