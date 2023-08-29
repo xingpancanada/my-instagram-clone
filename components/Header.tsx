@@ -8,7 +8,7 @@ import { AiFillPlusCircle, AiFillHome } from 'react-icons/ai'
 import SigninButton from './SigninButton'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { modalState } from '../atom/modalAtom';
+import { modalState } from '../atom/modalAtom' //for global state - modal opened or closed
 import { useRecoilState } from 'recoil'
 
 export default function Header() {
@@ -39,7 +39,7 @@ export default function Header() {
           <SearchBox />
         </div>
         <div className='flex space-x-4 items-center'>
-          <AiFillHome className='hidden md:inline-flex h-10 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
+          <AiFillHome onClick={() => router.push("/")} className='hidden md:inline-flex h-10 w-auto cursor-pointer hover:scale-110 transition-transform duration-300 ease-out' />
 
           {session ? (
             <>

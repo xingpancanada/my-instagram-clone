@@ -11,7 +11,7 @@ export default function signin() {
       <div className='grid justify-items-center p-36'>
         <img src="/instagram-logo.png" alt="instagram-logo" className='h-48 mb-6 rotate-6'/>
         <button onClick={() => signIn('google', {callbackUrl: "/"})} className='flex items-center font-semibold bg-slate-100 hover:bg-slate-200 hover:shadow px-6 py-1 rounded-md cursor-pointer transition-all ease-out duration-200'>
-        <img src="/google-logo.png" alt="instagram-logo" className='h-10 pr-2'/>
+        <img src="/google-logo-xxs.png" alt="instagram-logo" className='h-10 pr-2'/>
           Sign In with Google
         </button>
       </div>
