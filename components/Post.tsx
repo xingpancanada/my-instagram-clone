@@ -1,16 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import { db } from '@/firebase';
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { BiDotsHorizontalRounded } from 'react-icons/bi'
-import { BsChatDots, BsBookmark, BsHeart, BsEmojiSmile } from 'react-icons/bs'
+import { BsChatDots, BsBookmark, BsHeart, BsEmojiSmile, BsHeartFill } from 'react-icons/bs'
 import Moment from 'react-moment';
 
 export default function Post({ img, userImg, username, id, caption, timestamp }: any) {
-  const { data: session } = useSession();
+  const { data: session }: any = useSession();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [likes, setLikes] = useState([]);
+
+  //console.log("session data user uid", session.user.uid);
 
   useEffect(() => {
     const unsubsribe = onSnapshot(
@@ -34,6 +38,27 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
     })
   }
 
+  useEffect(() => {
+    const unsubsribe = onSnapshot(collection(db, "posts", id, "likes"), (snapshot: any) => setLikes(snapshot.docs));
+    return unsubsribe;
+  },[id]);
+
+  useEffect(() => {
+    setHasLiked(
+      likes.findIndex((like: any) => like.id === session?.user?.uid) !== -1
+    )
+  }, [likes, session?.user?.uid])
+
+  async function likePost(){
+    if(hasLiked){
+      await deleteDoc(doc(db, "posts", id, "likes", session?.user?.uid));
+    }else{
+      await setDoc(doc(db, "posts", id, "likes", session?.user?.uid), {
+        username: session?.user?.name,
+      });
+    }
+  }
+
   return (
     <div className='bg-white my-6 border rounded-md'>
       {/* post header */}
@@ -52,7 +77,11 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
       {session && (
         <div className='flex items-center justify-between px-6 pt-6'>
           <div className='flex space-x-4'>
-            <BsHeart className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
+            {hasLiked ? (
+              <BsHeartFill onClick={()=>likePost()} className='text-2xl text-red-400 hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
+            ) : (
+              <BsHeart onClick={()=>likePost()} className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
+            )}
             <BsChatDots className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
           </div>
           <BsBookmark className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />

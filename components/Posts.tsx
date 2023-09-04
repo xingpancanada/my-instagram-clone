@@ -23,6 +23,7 @@ export default function Posts() {
   // ]
 
   const [posts, setPosts] = useState([]);
+  
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, 'posts'), orderBy(('timestamp'), "desc")),
@@ -31,7 +32,7 @@ export default function Posts() {
       }
     );
     return unsubscribe; //if no return here, then it loops forever
-  }, [posts])
+  }, [])
 
   //console.log(posts);
 
