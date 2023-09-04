@@ -12,6 +12,7 @@ const authOptions: any = {
   // pages: {
   //   signin: "/auth/signin",
   // },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token, user }: any) {
       session.user.uid = token.sub; //add uid from token
