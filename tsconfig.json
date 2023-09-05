@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/Header.tsx"  ],
   "exclude": [
     "node_modules"
   ]

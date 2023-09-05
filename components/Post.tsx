@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { userState } from '@/atom/userAtom';
 import { db } from '@/firebase';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useSession } from 'next-auth/react'
@@ -6,14 +7,17 @@ import React, { useEffect, useState } from 'react'
 import { BiDotsHorizontalRounded } from 'react-icons/bi'
 import { BsChatDots, BsBookmark, BsHeart, BsEmojiSmile, BsHeartFill } from 'react-icons/bs'
 import Moment from 'react-moment';
+import { useRecoilState } from 'recoil';
 
 export default function Post({ img, userImg, username, id, caption, timestamp }: any) {
-  const { data: session }: any = useSession();
+  //const { data: session }: any = useSession();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [likes, setLikes] = useState([]);
 
+  const [currentUser, setCurrentUser]: any = useRecoilState(userState);
+  
   //console.log("session data user uid", session.user.uid);
 
   useEffect(() => {
@@ -32,8 +36,10 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session?.user?.name,
-      userImage: session?.user?.image,
+      // username: session?.user?.name,
+      // userImage: session?.user?.image,
+      username: currentUser?.name,
+      userImage: currentUser?.userImg,
       timestamp: serverTimestamp(),
     })
   }
@@ -41,20 +47,34 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
   useEffect(() => {
     const unsubsribe = onSnapshot(collection(db, "posts", id, "likes"), (snapshot: any) => setLikes(snapshot.docs));
     return unsubsribe;
-  },[id]);
+  }, [id]);
 
+  // useEffect(() => {
+  //   setHasLiked(
+  //     likes.findIndex((like: any) => like.id === session?.user?.uid) !== -1
+  //   )
+  // }, [likes, session?.user?.uid])
   useEffect(() => {
     setHasLiked(
-      likes.findIndex((like: any) => like.id === session?.user?.uid) !== -1
+      likes.findIndex((like: any) => like.id === currentUser?.uid) !== -1
     )
-  }, [likes, session?.user?.uid])
+  }, [likes, currentUser?.uid])
 
-  async function likePost(){
-    if(hasLiked){
-      await deleteDoc(doc(db, "posts", id, "likes", session?.user?.uid));
-    }else{
-      await setDoc(doc(db, "posts", id, "likes", session?.user?.uid), {
-        username: session?.user?.name,
+  // async function likePost() {
+  //   if (hasLiked) {
+  //     await deleteDoc(doc(db, "posts", id, "likes", session?.user?.uid));
+  //   } else {
+  //     await setDoc(doc(db, "posts", id, "likes", session?.user?.uid), {
+  //       username: session?.user?.name,
+  //     });
+  //   }
+  // }
+  async function likePost() {
+    if (hasLiked) {
+      await deleteDoc(doc(db, "posts", id, "likes", currentUser?.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "likes", currentUser?.uid), {
+        username: currentUser?.name,
       });
     }
   }
@@ -74,14 +94,20 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
       <img src={img} alt={img} className='object-cover w-full' />
 
       {/* post buttons */}
-      {session && (
+      {/* {session && ( */}
+      {currentUser && (
         <div className='flex items-center justify-between px-6 pt-6'>
-          <div className='flex space-x-4'>
-            {hasLiked ? (
-              <BsHeartFill onClick={()=>likePost()} className='text-2xl text-red-400 hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
-            ) : (
-              <BsHeart onClick={()=>likePost()} className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
-            )}
+          <div className='flex space-x-6 items-center'>
+            <div className='flex space-x-2 items-center'>
+              {hasLiked ? (
+                <BsHeartFill onClick={() => likePost()} className='text-2xl text-red-400 hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
+              ) : (
+                <BsHeart onClick={() => likePost()} className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
+              )}
+              {likes.length > 0 && (
+                <p className='font-semibold text-xs'>{likes.length} likes</p>
+              )}
+            </div>
             <BsChatDots className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
           </div>
           <BsBookmark className='text-2xl hover:scale-125 transition-transform ease-out duration-200 cursor-pointer' />
@@ -115,7 +141,8 @@ export default function Post({ img, userImg, username, id, caption, timestamp }:
       )}
 
       {/* post input box */}
-      {session && (
+      {/* {session && ( */}
+      {currentUser && (
         <form action="" className='flex space-x-4 items-center p-6'>
           <BsEmojiSmile className='text-2xl' />
           <input type="text" placeholder='Enter your comment' value={comment} onChange={(event: any) => setComment(event.target.value)} className='p-3 border rounded-md focus:ring-0 focus:outline-0 flex-1' />

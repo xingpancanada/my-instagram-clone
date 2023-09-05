@@ -9,6 +9,7 @@ import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/fi
 import { db, storage } from '../firebase';
 import { useSession } from "next-auth/react";
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { userState } from '@/atom/userAtom';
 
 export default function UploadModal() {
   const [open, setOpen] = useRecoilState(modalState);
@@ -17,7 +18,8 @@ export default function UploadModal() {
   const filePickerRef: any = useRef(null);
   const captionRef: any = useRef(null);
 
-  const {data: session}: any = useSession();
+  //const {data: session}: any = useSession();
+  const [currentUser, setCurrentUser]: any = useRecoilState(userState);
 
   // read image file from input
   function addImageToPost(event: any) {
@@ -40,8 +42,10 @@ export default function UploadModal() {
     //post to firestore
     const docRef: any = await addDoc(collection(db, "posts"), {
       caption: captionRef.current.value,
-      username: session.user.name,
-      profileImg: session.user.image,
+      // username: session.user.name,
+      // profileImg: session.user.image,
+      username: currentUser?.name,
+      profileImg: currentUser?.userImg,
       timestamp: serverTimestamp(),
     });
     //store image into firebase storage & update document to add image downloadURL
